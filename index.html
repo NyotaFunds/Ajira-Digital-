@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AJIRA DIGITAL 2026</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com" rel="stylesheet" />
+<style>
+  :root { --saf-green: #49aa47; --kenya-red: #bb0101; --navy: #002147; }
+  .saf-bg { background-color: var(--saf-green); }
+  .glow-red { box-shadow: 0 0 20px rgba(187, 1, 1, 0.5); }
+  @keyframes slideUp { 0% { transform: translateY(0); } 100% { transform: translateY(-100%); } }
+  #comment-box-inner { animation: slideUp 160s linear infinite; }
+  #comment-box-inner:hover { animation-play-state: paused; }
+  #ticker { animation: ticker 40s linear infinite; }
+  @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+  .urgent-blink { animation: blink 1.2s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .error-msg { color: #ff4444; font-size: 10px; font-weight: bold; margin-top: 4px; display: none; }
+  .btn-disabled { background-color: #ccc !important; cursor: not-allowed !important; transform: none !important; opacity: 0.6; }
+  /* Modal styles */
+  .modal { background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+  .modal-inner { max-width: 400px; padding: 2rem; border-radius: 2rem; background: #fff; box-shadow: 0 0 20px rgba(0,0,0,0.3); }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+</head>
+<body class="bg-[#f4f7f9] font-sans selection:bg-green-200 overflow-x-hidden">
+
+<div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3 pointer-events-none"></div>
+
+<div class="bg-black text-white py-2 overflow-hidden border-b-2 border-yellow-500 whitespace-nowrap relative z-10">
+  <div class="ticker-move inline-block text-[10px] font-black uppercase tracking-tighter" id="ticker">
+    🇰🇪 CONFIRMED: KSh 4,800 sent to 0722***412 ... ✅ SUCCESS: KSh 3,200 sent to 0791***003 ... 💰 PAID: KSh 7,500 sent to 0711***992 ... ✅ SUCCESS: KSh 2,400 sent to 0743***110 ...
+  </div>
+</div>
+
+<nav class="bg-white border-b-4 border-[#49aa47] px-4 md:px-10 py-4 flex justify-between items-center sticky top-0 z-50 shadow-2xl">
+  <div class="flex items-center gap-3">
+    <img src="https://upload.wikimedia.org" class="h-12" alt="Seal" />
+    <div>
+      <h1 class="text-xl md:text-2xl font-black text-[#002147] leading-none tracking-tighter uppercase italic">Kenya<span class="text-[#49aa47]">Typists</span></h1>
+      <p class="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em]">National Digitization Authority</p>
+    </div>
+  </div>
+  <div class="text-right">
+    <div class="bg-red-600 text-white px-3 py-1 rounded-full text-[10px] font-black urgent-blink glow-red">
+      ⚠️ <span id="slots">18</span> POSITIONS LEFT TODAY
+    </div>
+    <p class="text-[8px] font-bold text-gray-400 mt-1 uppercase">SECURED IP: 197.248.XX.XX</p>
+  </div>
+</nav>
+
+<!-- Main Header Content -->
+<header class="bg-[#002147] pt-12 pb-20 px-6 text-white text-center relative overflow-hidden">
+  <div class="max-w-5xl mx-auto relative z-10">
+    <span class="bg-[#ffcc00] text-black px-4 py-1 rounded-md text-[10px] font-extrabold mb-6 inline-block uppercase tracking-widest">OFFICIAL VISION 2030 NGO PARTNERSHIP</span>
+    <h1 class="text-4xl md:text-7xl font-black mb-4 leading-tight tracking-tighter italic">Type. Earn. Repeat.</h1>
+    
+    <div class="max-w-2xl mx-auto mb-4 bg-white/10 p-6 rounded-2xl border border-white/20 text-left">
+      <h3 class="text-[#ffcc00] font-black text-sm uppercase mb-2 italic"><i class="fas fa-file-invoice mr-2"></i> WORK SPECIFICATION: NADU/2026/04</h3>
+      <p class="text-xs md:text-sm leading-relaxed opacity-90 font-medium">
+        Remote personnel are tasked with digitally converting handwritten land and medical records from the years 1972 to 1998. This involves accurately inputting data such as Names, Dates, and Identification Numbers into our secure cloud database using smartphones or PCs. This project is a vital part of Kenya’s national digitization efforts aimed at preserving essential records and enhancing accessibility.
+      </p>
+    </div>
+
+    <!-- Training Info -->
+    <div class="max-w-2xl mx-auto mb-10 bg-green-900/40 p-4 rounded-xl border border-green-500/30 text-left flex items-start gap-4 shadow-xl">
+      <div class="bg-green-500 text-white p-2 rounded-lg"><i class="fab fa-whatsapp text-xl"></i></div>
+      <div>
+        <h4 class="text-xs font-black uppercase text-green-400">Comprehensive WhatsApp Training Program</h4>
+        <p class="text-[11px] opacity-90 leading-tight">Once verified, candidates will be integrated into the official NADU WhatsApp Group. A dedicated supervisor will provide step-by-step guidance on the initial batch of archives, ensuring a smooth onboarding process and efficient task management.</p>
+      </div>
+    </div>
+
+    <!-- Income Projection -->
+    <div class="max-w-lg mx-auto bg-white/5 backdrop-blur-2xl p-8 rounded-[3rem] border border-white/10 shadow-2xl relative">
+      <p class="text-[10px] uppercase font-black text-yellow-500 mb-4 tracking-[0.3em]">Projected Daily Income</p>
+      <div class="flex justify-between items-center text-6xl font-black text-[#49aa47] mb-4">
+        <span class="text-3xl text-white">KSh</span>
+        <span id="salary-val">4,500</span>
+      </div>
+      <input type="range" id="salary-slider" min="1500" max="9000" step="150" value="4500" class="w-full h-3 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-[#49aa47]" />
+      <!-- Labels for slider -->
+      <div class="flex justify-between text-xs font-semibold mt-2 px-2">
+        <span class="text-left text-green-500">Beginner</span>
+        <span class="text-right text-green-500">Expert</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="max-w-[1400px] mx-auto px-4 md:px-10 mt-10 grid lg:grid-cols-4 gap-8 pb-20">
+  <div class="lg:col-span-1">
+    <div class="bg-white p-6 rounded-[2rem] shadow-2xl border border-gray-100 h-[700px] overflow-hidden sticky top-28">
+      <h4 class="font-black text-sm text-gray-800 border-b pb-4 mb-4 flex justify-between">
+        <span>MEMBER FEEDBACK</span>
+        <span class="text-green-500 text-xs italic">● Online</span>
+      </h4>
+      <div class="h-full relative overflow-hidden">
+        <div id="comment-box-inner" class="space-y-4 text-[11px]"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lg:col-span-3 space-y-6">
+    <!-- Activation Fee -->
+    <div class="bg-yellow-50 p-8 rounded-[2.5rem] border-2 border-dashed border-yellow-500 shadow-lg">
+      <h4 class="font-black text-yellow-800 uppercase italic mb-3 flex items-center"><i class="fas fa-shield-alt mr-2 text-xl"></i> MANDATORY ACTIVATION</h4>
+      <p class="text-xs md:text-sm text-yellow-900 font-bold leading-relaxed">
+        A one-time activation fee of KSh 280 is required to access the B2C Daily Payout Gateway. This fee helps verify your authenticity and is designed to prevent bots and automated applications. Rest assured, this fee will be fully refunded with your first salary deposit, ensuring a trustworthy and transparent process.
+      </p>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="relative bg-white rounded-[3rem] shadow-2xl p-8 md:p-12 border-t-[12px] border-[#49aa47]">
+      <h2 class="text-4xl font-black text-[#002147] tracking-tighter italic mb-8">Candidate Portal</h2>
+      <form id="regForm" class="space-y-6">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <input type="text" id="fname" placeholder="Full ID Names" required class="w-full bg-gray-50 border-2 border-gray-100 p-5 rounded-3xl focus:border-[#49aa47] outline-none font-bold text-gray-700 shadow-inner" />
+            <p id="error-name" class="error-msg">Please enter your full official name.</p>
+          </div>
+          <div>
+            <input type="text" id="idnum" placeholder="National ID Number" required class="w-full bg-gray-50 border-2 border-gray-100 p-5 rounded-3xl focus:border-[#49aa47] outline-none font-bold text-gray-700 shadow-inner" />
+            <p id="error-id" class="error-msg">ID must be exactly 8 digits.</p>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <input type="tel" id="fphone" placeholder="M-Pesa Number" required class="w-full bg-gray-50 border-2 border-gray-100 p-5 rounded-3xl focus:border-[#49aa47] outline-none font-bold text-gray-700 shadow-inner" />
+            <p id="error-phone" class="error-msg">Use valid format (07... / 01... / 254...).</p>
+          </div>
+          <div>
+            <input type="tel" id="wphone" placeholder="WhatsApp Number" required class="w-full bg-gray-50 border-2 border-gray-100 p-5 rounded-3xl focus:border-[#49aa47] outline-none font-bold text-gray-700 shadow-inner" />
+            <p id="error-wa" class="error-msg">WhatsApp number required.</p>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <select id="fcounty" class="w-full bg-gray-50 border-2 border-gray-100 p-5 rounded-3xl outline-none font-black text-gray-700 shadow-inner"></select>
+        </div>
+        <!-- New dropdown for skill level -->
+        <div class="mt-4">
+          <select id="skillLevel" class="w-full bg-gray-50 border-2 border-gray-100 p-5 rounded-3xl outline-none font-black text-gray-700 shadow-inner">
+            <option value="Beginner" selected>Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Expert">Expert</option>
+          </select>
+        </div>
+        <button type="button" id="submitBtn" onclick="launchScamLoader()" class="saf-bg w-full text-white font-black py-7 rounded-[2.5rem] btn-disabled transition-all shadow-2xl" disabled>
+          REGISTER &amp; START WORK <i class="fas fa-rocket"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- Partner Logos -->
+    <div class="flex flex-wrap justify-center items-center gap-12 opacity-30 grayscale filter mt-10 pb-10">
+      <img src="https://upload.wikimedia.org" class="h-5" />
+      <img src="https://upload.wikimedia.org" class="h-8" />
+      <img src="https://www.kra.go.ke" class="h-6" />
+    </div>
+  </div>
+</main>
+
+<!-- Processing Modal -->
+<div id="loader" class="fixed inset-0 flex items-center justify-center modal hidden z-50">
+  <div class="modal-inner text-white text-center">
+    <div class="relative mb-4">
+      <div class="h-24 w-24 border-4 border-white/10 rounded-full"></div>
+      <div class="h-24 w-24 border-4 border-[#49aa47] border-t-transparent rounded-full animate-spin absolute top-0 left-0"></div>
+      <i class="fas fa-fingerprint text-3xl text-[#49aa47] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></i>
+    </div>
+    <h2 class="text-3xl font-black mb-4 uppercase italic tracking-tighter" id="l-title">VERIFYING YOUR DATA...</h2>
+    <div class="w-full max-w-md space-y-4 mx-auto">
+      <div class="bg-black/50 p-4 rounded-2xl border border-white/10 h-36 overflow-y-auto" id="l-logs"></div>
+      <div class="h-2 bg-white/10 rounded-full w-full overflow-hidden">
+        <div id="l-inner-bar" class="h-full bg-[#49aa47] w-0 transition-all duration-300"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const slider = document.getElementById('salary-slider');
+    const salaryOut = document.getElementById('salary-val');
+    const commentsContainer = document.getElementById('comment-box-inner');
+
+    // Initialize slider value display
+    const updateSalary = () => {
+      salaryOut.innerText = parseInt(slider.value).toLocaleString();
+    };
+    slider.oninput = updateSalary;
+    updateSalary();
+
+    // Populate counties
+    const counties = ["Marsabit", "Isiolo", "Meru", "Tharaka-Nithi", "Embu", "Kitui", "Machakos", "Makueni", "Nyandarua", "Nyeri", "Kirinyaga", "Murang'a", "Kiambu", "Turkana", "West Pokot", "Samburu", "Trans Nzoia", "Uasin Gishu", "Elgeyo-Marakwet", "Nandi", "Baringo", "Laikipia", "Nakuru", "Narok", "Kajiado", "Kericho", "Bomet", "Kakamega", "Vihiga", "Bungoma", "Busia", "Siaya", "Kisumu", "Homa Bay", "Migori", "Kisii", "Nyamira", "Nairobi"];
+    const cSelect = document.getElementById('fcounty');
+    counties.forEach((c, i) => {
+      const opt = document.createElement('option');
+      opt.text = `${i+1}. ${c.toUpperCase()} (${Math.floor(Math.random()*15)+1} SLOTS)`;
+      cSelect.add(opt);
+    });
+
+    // Array of Kenyan names
+    const names = ["Waweru J.", "Mercy M.", "Otieno V.", "Sarah E.", "Hassan A.", "Fatma O.", "Brian M.", "Precious K.", "Juma P.", "Moraa J.", "Achieng R.", "Maina G.", "Chebet F.", "Bakari S.", "Wangari L.", "Omondi P.", "Linet A.", "Mutiso K.", "Gacheru D.", "Teresia W.", "Wasike S.", "Nduta G.", "Kamande R.", "Amondi V.", "Njoki F.", "Sambu K.", "Adhiambo P.", "Wako H.", "Khadija S.", "Eshiwani M.", "Wangui R.", "Osman Y.", "Kilonzo D.", "Mwashumbe L.", "Siele B.", "Kiplagat J.", "Naliaka S.", "Mutai K.", "Bett V.", "Nekesa M.", "Karanja G.", "Ochieng D.", "Atieno F.", "Cherono R.", "Kiprop S.", "Musyoka K.", "Wambua J.", "Mwangi S.", "Njoroge P.", "Kibet A."];
+    const reviews = [
+      "Payout imeingia sasa hivi!",
+      "Skeptical about the 280/- fee but I got it back.",
+      "Best side hustle in Kenya.",
+      "M-Pesa bonus confirmed! Asante.",
+      "Account verified instantly.",
+      "Highly recommended.",
+      "Kazi ni typing tu, pesa ni real.",
+      "Just withdrew 3,500/-.",
+      "Easy KSh 4,000 for just typing.",
+      "NGO Archive project will preserve history.",
+      "Process was smooth.",
+      "Nimepokea 5,800/- ya leo.",
+      "Mombasa slots are filling fast.",
+      "Is there a limit on pages?",
+      "System is fast on Chrome.",
+      "Already made 12k this week.",
+      "Nyeri slots are green.",
+      "Nimeanza batch ya kwanza.",
+      "KSh 450 bonus has hit.",
+      "Land records are easy to type.",
+      "Registration was instant.",
+      "Reliable income.",
+      "Can I use my laptop?",
+      "NADU project is a lifesaver.",
+      "Just received batch 44.",
+      "Taita people, slots are almost out.",
+      "This beats my regular job.",
+      "Bungoma represented!",
+      "Professional layout.",
+      "Payment confirmed 4,800/-.",
+      "Kericho team, kazi iendelee.",
+      "Verified and active.",
+      "Marsabit team join group 9.",
+      "First withdrawal successful.",
+      "Account activation smooth.",
+      "Security looks professional.",
+      "I love the flexibility.",
+      "NADU batch 99 is high pay.",
+      "Account secured.",
+      "Made 15k this week.",
+      "Siaya slots are full.",
+      "Support is responsive.",
+      "Finished batch NADU/44.",
+      "I love daily withdrawals.",
+      "NGO Archive project will help.",
+      "Easy 4,000 for typing.",
+      "Verified instantly.",
+      "Activation fee is worth it.",
+      "Vihiga slots are green.",
+      "I love M-Pesa payouts."
+    ];
+
+    const cBox = document.getElementById('comment-box-inner');
+
+    function populateComments() {
+      cBox.innerHTML = '';
+      // Shuffle the array for randomness
+      const shuffledNames = [...names].sort(() => 0.5 - Math.random());
+      const shuffledReviews = [...reviews].sort(() => 0.5 - Math.random());
+      // Display first 50 randomly paired comments
+      for (let i=0; i<50; i++) {
+        const div = document.createElement('div');
+        div.className = `bg-slate-50 p-3 rounded-2xl border-l-4 border-slate-300 mb-4`;
+        div.innerHTML = `<p class="font-black text-gray-800">${shuffledNames[i]}</p><p class="text-gray-600">"${shuffledReviews[i]}"</p>`;
+        cBox.appendChild(div);
+      }
+    }
+
+    // Initial comments
+    populateComments();
+
+    // Refresh comments on skill level change
+    document.getElementById('skillLevel').addEventListener('change', () => {
+      populateComments();
+    });
+
+    // Validation and button enable/disable logic
+    const inputs = [
+      document.getElementById('fname'),
+      document.getElementById('idnum'),
+      document.getElementById('fphone'),
+      document.getElementById('wphone'),
+      document.getElementById('fcounty'),
+      document.getElementById('skillLevel')
+    ];
+    const submitBtn = document.getElementById('submitBtn');
+
+    const validateInputs = () => {
+      let allValid = true;
+
+      // Check if all fields have some value
+      for (const input of inputs) {
+        if (!input.value.trim()) {
+          allValid = false;
+          break;
+        }
+      }
+
+      // Specific validation for ID number (8 digits)
+      const idnum = document.getElementById('idnum').value.trim();
+      if (idnum.length !== 8 || isNaN(idnum)) {
+        allValid = false;
+      }
+
+      // Validate phone numbers (basic pattern)
+      const fphone = document.getElementById('fphone').value.trim();
+      const wphone = document.getElementById('wphone').value.trim();
+      const phonePattern = /^(\+254|07|01)?\d{8}$/;
+      if (!phonePattern.test(fphone) || !phonePattern.test(wphone)) {
+        allValid = false;
+      }
+
+      // Enable or disable button based on validation
+      if (allValid) {
+        submitBtn.removeAttribute('disabled');
+        submitBtn.classList.remove('btn-disabled');
+      } else {
+        submitBtn.setAttribute('disabled', 'disabled');
+        submitBtn.classList.add('btn-disabled');
+      }
+    };
+
+    // Attach input event listeners for real-time validation
+    inputs.forEach(input => {
+      input.addEventListener('input', validateInputs);
+    });
+
+  });
+
+  function launchScamLoader() {
+    document.getElementById('loader').classList.remove('hidden');
+    const steps = [
+      { p: 15, l: "ACCESSING NATIONAL ID DATABASE... DATA CONFIRMED." },
+      { p: 30, l: "VERIFYING PAYMENT GATEWAY STATUS... SYSTEMS ACTIVE." },
+      { p: 45, l: "SECURING ENCRYPTION HANDSHAKE... ENCRYPTION ESTABLISHED." },
+      { p: 60, l: "ALLOCATING ARCHIVE BATCH... PROCESS IN PROGRESS." },
+      { p: 75, l: "PERFORMING FINAL AUDIT... VALIDATION IN PROGRESS." },
+      { p: 100, l: "VERIFICATION COMPLETE. REDIRECTING..." }
+    ];
+    let i = 0;
+    const t = setInterval(() => {
+      if (i < steps.length) {
+        document.getElementById('l-inner-bar').style.width = steps[i].p + "%";
+        const p = document.createElement('p');
+        p.className = "text-green-500 font-semibold";
+        p.innerText = "> " + steps[i].l;
+        document.getElementById('l-logs').appendChild(p);
+        i++;
+      } else {
+        clearInterval(t);
+        window.location.href = "index2.html";
+      }
+    }, 2000);
+  }
+</script>
+</body>
+  </html>
